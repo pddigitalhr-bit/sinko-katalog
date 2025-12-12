@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Katalog guma</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --card: #020617;
+      --accent: #9ca3af; /* svijetlo siva umjesto plave */
+      --accent-soft: rgba(156, 163, 175, 0.25);
+      --accent-text: #e5e7eb;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: linear-gradient(180deg, #1a1d22 0%, #0e1014 100%);
+      color: var(--text);
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 0.03em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .site-logo {
+      height: 46px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .shell {
+      background: rgba(15, 23, 42, 0.92);
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      padding: 14px;
+      backdrop-filter: blur(18px);
+      transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 600px) {
+      .filters { grid-template-columns: 1fr; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .field input,
+    .field select {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .field input::placeholder { color: #6b7280; }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent-soft);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.4);
+      padding: 4px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill strong { color: var(--accent-text); }
+
+    .btn-theme {
+      margin-left: auto;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 11px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .btn-theme:hover {
+      border-color: var(--accent);
+    }
+
+    .table-wrapper {
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #020617 0%, #020617 55%, #000 100%);
+      overflow: hidden;
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead {
+      background: rgba(15, 23, 42, 0.9);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      transition: background 0.25s ease;
+    }
+
+    th, td {
+      padding: 8px 14px;
+      text-align: left;
+      transition: border-color 0.25s ease, background 0.25s ease;
+    }
+
+    th:first-child,
+    td:first-child {
+      padding-left: 14px;
+      padding-right: 6px;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(31, 41, 55, 0.6);
+      background: transparent;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    th.sortable:hover {
+      color: var(--accent);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    th .sort-indicator {
+      margin-left: 4px;
+      font-size: 10px;
+      opacity: 0.6;
+    }
+
+    tbody tr:hover {
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .name-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tyre-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: radial-gradient(circle at 30% 20%, #1f2937 0, #020617 50%);
+      border: 1px solid rgba(31, 41, 55, 0.8);
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .name-main { font-weight: 500; }
+
+    .name-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .brand-inline {
+      display: none;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .availability-note {
+      margin-top: 2px;
+      font-size: 10px;
+      color: var(--muted);
+      opacity: 0.9;
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tag.zimska {
+      background: rgba(59, 130, 246, 0.16);
+      color: #bfdbfe;
+      border: 1px solid rgba(59, 130, 246, 0.5);
+    }
+
+    .tag.ljetna {
+      background: rgba(234, 179, 8, 0.16);
+      color: #facc15;
+      border: 1px solid rgba(234, 179, 8, 0.5);
+    }
+
+    .tag.cjelogodisnja {
+      background: rgba(34, 197, 94, 0.16);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.5);
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      background: #020617;
+      transition: background 0.25s ease;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .btn-page {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 3px 9px;
+      background: var(--bg-soft);
+      color: var(--text);
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .btn-page[disabled] {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .btn-page.primary {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.95);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .footer-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-right: 12px;
+    }
+
+    .footer-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .footer-label {
+      font-weight: 600;
+    }
+
+    .footer a {
+      color: var(--accent-text);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 768px) {
+      th:nth-child(4),
+      td:nth-child(4) {
+        display: none;
+      }
+      .shell { padding: 10px; }
+      header h1 { font-size: 20px; }
+    }
+
+    /* LIGHT TEMA */
+    body.light-theme {
+      --bg: #f9fafb;
+      --bg-soft: #e5e7eb;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #111827;
+      --border: #d1d5db;
+      background: radial-gradient(circle at top, #e5e7eb 0, #f9fafb 55%, #e5e7eb 100%);
+      color: var(--text);
+    }
+
+    body.light-theme .shell {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(148, 163, 184, 0.6);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+    }
+
+    body.light-theme .table-wrapper {
+      background: linear-gradient(180deg, #f9fafb 0%, #e5e7eb 55%, #d1d5db 100%);
+      border-color: var(--border);
+    }
+
+    body.light-theme thead { background: #e5e7eb; }
+
+    body.light-theme th, 
+    body.light-theme td { color: #111827; }
+
+    body.light-theme tbody tr {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    body.light-theme tbody tr:last-child { border-bottom: none; }
+
+    body.light-theme .field label,
+    body.light-theme .toolbar,
+    body.light-theme .pagination { color: #111827; }
+
+    body.light-theme tbody tr:hover { background: #f3f4f6; }
+
+    body.light-theme .tyre-img {
+      background: transparent;
+      border-color: transparent;
+    }
+
+    body.light-theme .pagination { background: #e5e7eb; }
+
+    body.light-theme .btn-theme {
+      background: #ffffff;
+      color: #111827;
+    }
+
+    body.light-theme .field input,
+    body.light-theme .field select {
+      background: #ffffff;
+      color: #111827;
+    }
+
+    body.light-theme .tag { font-weight: 600; }
+
+    body.light-theme .tag.zimska {
+      background: #dbeafe;
+      color: #1e3a8a;
+      border-color: #93c5fd;
+    }
+
+    body.light-theme .tag.ljetna {
+      background: #fef9c3;
+      color: #b45309;
+      border-color: #fde047;
+    }
+
+    body.light-theme .tag.cjelogodisnja {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #86efac;
+    }
+
+    body.light-theme .footer {
+      background: #e5e7eb;
+      border-color: #d1d5db;
+      color: #111827;
+    }
+
+    body.light-theme .footer a { color: #1d4ed8; }
+
+    .season-tag-mobile {
+      display: none;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      thead { display: none; }
+
+      .table-wrapper {
+        border-radius: 18px;
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+      }
+
+      tbody {
+        display: block;
+        padding: 8px 6px 12px;
+      }
+
+      tbody tr {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(15, 23, 42, 0.96);
+        border-radius: 12px;
+        padding: 10px 12px;
+        border: 1px solid rgba(15, 23, 42, 1);
+      }
+
+      tbody tr:hover { background: rgba(15, 23, 42, 1); }
+
+      tbody td {
+        border: none;
+        padding: 0;
+      }
+
+      tbody td:first-child { flex-shrink: 0; }
+
+      .tyre-img {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
+      }
+
+      .name-cell {
+        flex: 1;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+      }
+
+      td.price-cell {
+        text-align: right;
+        font-weight: 600;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      th.brand-col,
+      td.brand-col,
+      th.season-col,
+      td.season-col {
+        display: none !important;
+      }
+
+      .brand-inline { display: block; }
+      .season-tag-mobile { display: inline-flex; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <img src="assets/logo.png" class="site-logo" alt="Logo" />
+      <h1>Katalog guma</h1>
+      <p>Filtriraj, pretraži i sortiraj sve gume.</p>
+    </header>
+
+    <div class="shell">
+      <div class="filters">
+        <div class="field">
+          <label for="searchInput">Pretraga po nazivu</label>
+          <input id="searchInput" type="text" placeholder="npr. TRACMAX 205/55 R16..." />
+        </div>
+
+        <div class="field">
+          <label for="productTypeSelect">Proizvod</label>
+          <select id="productTypeSelect">
+            <option value="">Svi proizvodi</option>
+            <option value="auto-guma">Auto gume</option>
+            <option value="senzor">Senzori</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="seasonSelect">Sezona</label>
+          <select id="seasonSelect">
+            <option value="">Sve</option>
+            <option value="Zimska">Zimske</option>
+            <option value="Ljetna">Ljetne</option>
+            <option value="Cjelogodišnja">Cjelogodišnje</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="brandSelect">Brand</label>
+          <select id="brandSelect">
+            <option value="">Svi brandovi</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="widthSelect">Širina</label>
+          <select id="widthSelect">
+            <option value="">Sve širine</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="heightSelect">Visina</label>
+          <select id="heightSelect">
+            <option value="">Sve visine</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="rimSelect">Promjer (R)</label>
+          <select id="rimSelect">
+            <option value="">Svi promjeri</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="pill">
+          <span>Prikazano:</span>
+          <strong id="countInfo">0</strong>
+        </div>
+        <div class="pill">
+          <span>Sort:</span>
+          <strong id="sortInfo">Naziv ↑</strong>
+        </div>
+        <button id="themeToggleBtn" class="btn-theme">Svijetla pozadina</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th class="sortable" data-sort="name">Naziv <span class="sort-indicator">▲</span></th>
+              <th class="sortable brand-col" data-sort="brand">Brand <span class="sort-indicator"></span></th>
+              <th class="sortable" data-sort="dimension">Dimenzija <span class="sort-indicator"></span></th>
+              <th class="sortable" data-sort="priceDisplay">Cijena <span class="sort-indicator"></span></th>
+              <th class="sortable season-col" data-sort="season">Sezona <span class="sort-indicator"></span></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+        <div class="pagination">
+          <div id="pageInfo">Stranica 1/1</div>
+          <div class="pagination-controls">
+            <button class="btn-page" id="prevPageBtn">&laquo; Prethodna</button>
+            <button class="btn-page primary" id="nextPageBtn">Sljedeća &raquo;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-title">Kontakt</div>
+      <div class="footer-item">
+        <span class="footer-label">E-mail:</span>
+        <a href="mailto:info.sinkocars@gmail.com">info.sinkocars@gmail.com</a>
+      </div>
+      <div class="footer-item">
+        <span class="footer-label">Telefon:</span>
+        <a href="tel:0989676055">098 9676 055</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JSON guma (punimo ga fetchom, logika parsiranja ostaje ista) -->
+  <script id="gume-data" type="application/json"></script>
+
+  <!-- JSON senzora (punimo ga fetchom, logika parsiranja ostaje ista) -->
+  <script id="senzori-data" type="application/json"></script>
+
+  <!-- Loader: učita vanjske JSON datoteke i ubaci ih u postojeće script tagove -->
+  <script>
+    async function loadExternalJsonIntoScript(id, url) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
+        const text = await res.text();
+        document.getElementById(id).textContent = text;
+      } catch (e) {
+        console.warn("Ne mogu učitati:", url, e);
+        document.getElementById(id).textContent = "[]";
+      }
+    }
+
+    async function preloadAllJson() {
+      await loadExternalJsonIntoScript("gume-data", "data/gume.json");
+      await loadExternalJsonIntoScript("senzori-data", "data/senzori.json");
+    }
+  </script>
+
+  <script>
+    const PAGE_SIZE = 50;
+    let allData = [];
+    let filteredData = [];
+    let currentPage = 1;
+    let currentSort = { field: "name", dir: "asc" };
+
+    const tbody = document.getElementById("tableBody");
+    const searchInput = document.getElementById("searchInput");
+    const seasonSelect = document.getElementById("seasonSelect");
+    const brandSelect = document.getElementById("brandSelect");
+    const productTypeSelect = document.getElementById("productTypeSelect");
+    const widthSelect = document.getElementById("widthSelect");
+    const heightSelect = document.getElementById("heightSelect");
+    const rimSelect = document.getElementById("rimSelect");
+    const countInfo = document.getElementById("countInfo");
+    const sortInfo = document.getElementById("sortInfo");
+    const pageInfo = document.getElementById("pageInfo");
+    const prevPageBtn = document.getElementById("prevPageBtn");
+    const nextPageBtn = document.getElementById("nextPageBtn");
+    const themeToggleBtn = document.getElementById("themeToggleBtn");
+
+    function stripAccents(s) {
+      if (!s) return "";
+      if (s.normalize) {
+        return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
+      return s;
+    }
+
+    // parsiranje dimenzije 205/55R16, 205/55ZR16, 195/65R15XL ...
+    function splitTyreDimension(dimStr) {
+      if (!dimStr) return { width: "", height: "", rim: "" };
+      let s = String(dimStr).toUpperCase().replace(/\s+/g, "");
+      const m = s.match(/(\d{3})\/(\d{2})(?:[A-Z]+)?R(\d{2})/);
+      if (!m) return { width: "", height: "", rim: "" };
+      return { width: m[1], height: m[2], rim: m[3] };
+    }
+
+    // sezona iz dimension_label
+    function detectSeason(item) {
+      const dimLabel = item.dimension_label || item.dimensionLabel || "";
+      if (!dimLabel) return "";
+
+      let s = stripAccents(dimLabel.toLowerCase().trim());
+      const m = s.match(/^[^\d]+/);
+      if (m) s = m[0].trim();
+
+      if (s.includes("celoljet") || s.includes("cjelogod") || s.includes("cjelogodis"))
+        return "Cjelogodišnja";
+      if (s.includes("ljet")) return "Ljetna";
+      if (s.includes("zim")) return "Zimska";
+      return "";
+    }
+
+    function parseEmbeddedJson(scriptId, defaultProductType) {
+      const el = document.getElementById(scriptId);
+      if (!el) return [];
+
+      let raw = el.textContent.trim();
+      if (!raw) return [];
+
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (e1) {
+        try { parsed = JSON.parse("[" + raw + "]"); }
+        catch (e2) {
+          try { parsed = (new Function("return " + raw))(); }
+          catch (e3) {
+            try { parsed = (new Function("return [" + raw + "]"))(); }
+            catch (e4) {
+              console.error("Ne mogu parsirati JSON iz", scriptId, e1, e2, e3, e4);
+              return [];
+            }
+          }
+        }
+      }
+
+      let arr;
+      if (Array.isArray(parsed)) arr = parsed;
+      else if (parsed && Array.isArray(parsed.data)) arr = parsed.data;
+      else if (parsed && typeof parsed === "object") arr = Object.values(parsed);
+      else arr = [];
+
+      const flat = [];
+      for (const node of arr) {
+        if (!node) continue;
+        if (Array.isArray(node.items)) {
+          const groupDimLabel = node.dimension_label || node.dimensionLabel || "";
+          for (const t of node.items) {
+            flat.push({ ...t, dimension_label: t.dimension_label || groupDimLabel });
+          }
+        } else {
+          flat.push(node);
+        }
+      }
+
+      // map u finalni oblik
+      return flat.map((item) => {
+        let brand = "";
+
+        const pUrl = item.product_url || item.productUrl || "";
+        if (pUrl) {
+          try {
+            const urlWithoutQuery = pUrl.split("?")[0];
+            const parts = urlWithoutQuery.split("/").filter(Boolean);
+            const lastSegment = parts[parts.length - 1] || "";
+            const tokens = lastSegment.split("-").filter(Boolean);
+
+            let candidate = tokens.find((t) => !/\d/.test(t));
+            if (!candidate && tokens.length) {
+              candidate = tokens[0];
+            }
+            if (candidate) {
+              brand = candidate.toUpperCase();
+            }
+          } catch (e) {
+            // ignore
+          }
+        }
+
+        if (!brand) {
+          const imgUrl = item.image_url || item.image || "";
+          if (imgUrl) {
+            const fileName = imgUrl.split("/").pop().split("?")[0];
+            const base = fileName.split(".")[0];
+            if (base) brand = base.toUpperCase();
+          }
+        }
+
+        if (!brand && item.brand) {
+          brand = String(item.brand).toUpperCase();
+        }
+
+        const priceDisplay =
+          item.price_original ??
+          item.price_final ??
+          item.original_price ??
+          item.price ??
+          item.cijena ??
+          item.cijena_bez_pdv ??
+          "";
+
+        const season = detectSeason(item);
+
+        const productType =
+          item.productType || item.product_type || defaultProductType || "auto-guma";
+
+        const dimSource = item.dimension || item.dimension_label || "";
+        const { width, height, rim } = splitTyreDimension(dimSource);
+
+        return {
+          ...item,
+          brand,
+          priceDisplay,
+          season,
+          productType,
+          dimWidth: width,
+          dimHeight: height,
+          dimRim: rim,
+        };
+      });
+    }
+
+    function initData() {
+      const gume = parseEmbeddedJson("gume-data", "auto-guma");
+      const senzori = parseEmbeddedJson("senzori-data", "senzor");
+      allData = [...gume, ...senzori];
+      console.log("Učitano stavki:", allData.length);
+    }
+
+    function initBrandFilter() {
+      const brands = Array.from(
+        new Set(
+          allData.map((x) => x.brand || "").filter((x) => x && x.trim().length > 0)
+        )
+      ).sort((a, b) => a.localeCompare(b, "hr"));
+
+      for (const b of brands) {
+        const opt = document.createElement("option");
+        opt.value = b;
+        opt.textContent = b;
+        brandSelect.appendChild(opt);
+      }
+    }
+
+    function initDimensionFilters() {
+      if (!widthSelect && !heightSelect && !rimSelect) return;
+
+      const widths = new Set();
+      const heights = new Set();
+      const rims = new Set();
+
+      for (const item of allData) {
+        if (item.dimWidth) widths.add(item.dimWidth);
+        if (item.dimHeight) heights.add(item.dimHeight);
+        if (item.dimRim) rims.add(item.dimRim);
+      }
+
+      const sortedWidths = Array.from(widths).sort((a, b) => parseInt(a) - parseInt(b));
+      const sortedHeights = Array.from(heights).sort((a, b) => parseInt(a) - parseInt(b));
+      const sortedRims = Array.from(rims).sort((a, b) => parseInt(a) - parseInt(b));
+
+      for (const w of sortedWidths) {
+        const opt = document.createElement("option");
+        opt.value = w;
+        opt.textContent = w;
+        widthSelect.appendChild(opt);
+      }
+
+      for (const h of sortedHeights) {
+        const opt = document.createElement("option");
+        opt.value = h;
+        opt.textContent = h;
+        heightSelect.appendChild(opt);
+      }
+
+      for (const r of sortedRims) {
+        const opt = document.createElement("option");
+        opt.value = r;
+        opt.textContent = "R" + r;
+        rimSelect.appendChild(opt);
+      }
+    }
+
+    function applyFilters() {
+      const q = (searchInput?.value || "").toLowerCase().trim();
+      const productType = productTypeSelect?.value || "";
+      const season = seasonSelect?.value || "";
+      const brand = brandSelect?.value || "";
+      const width = widthSelect?.value || "";
+      const height = heightSelect?.value || "";
+      const rim = rimSelect?.value || "";
+
+      filteredData = allData.filter((item) => {
+        if (q && !(item.name || "").toLowerCase().includes(q)) return false;
+
+        if (productType) {
+          const pt = item.productType || item.product_type || "";
+          if (productType === "auto-guma" && pt !== "auto-guma") return false;
+          if (productType === "senzor" && pt !== "senzor") return false;
+        }
+
+        if (season && item.season !== season) return false;
+        if (brand && item.brand !== brand) return false;
+
+        if (width || height || rim) {
+          const w = item.dimWidth || "";
+          const h = item.dimHeight || "";
+          const r = item.dimRim || "";
+          if (width && w !== width) return false;
+          if (height && h !== height) return false;
+          if (rim && r !== rim) return false;
+        }
+
+        return true;
+      });
+
+      currentPage = 1;
+      applySort();
+    }
+
+    function parseNumeric(val) {
+      if (val == null) return NaN;
+      const s = String(val).replace(",", ".").replace(/[^\d.]/g, "");
+      const num = parseFloat(s);
+      return isNaN(num) ? NaN : num;
+    }
+
+    function applySort(field, toggle = false) {
+      if (field) {
+        if (toggle && currentSort.field === field)
+          currentSort.dir = currentSort.dir === "asc" ? "desc" : "asc";
+        else {
+          currentSort.field = field;
+          currentSort.dir = "asc";
+        }
+      }
+
+      filteredData.sort((a, b) => {
+        if (currentSort.field === "priceDisplay") {
+          const na = parseNumeric(a.priceDisplay);
+          const nb = parseNumeric(b.priceDisplay);
+          if (!isNaN(na) && !isNaN(nb)) {
+            if (na < nb) return currentSort.dir === "asc" ? -1 : 1;
+            if (na > nb) return currentSort.dir === "asc" ? 1 : -1;
+            return 0;
+          }
+        }
+
+        const sa = (a[currentSort.field] || "").toString().toLowerCase();
+        const sb = (b[currentSort.field] || "").toString().toLowerCase();
+        if (sa < sb) return currentSort.dir === "asc" ? -1 : 1;
+        if (sa > sb) return currentSort.dir === "asc" ? 1 : -1;
+        return 0;
+      });
+
+      updateSortIndicators();
+      render();
+    }
+
+    function updateSortIndicators() {
+      document.querySelectorAll("th.sortable").forEach((th) => {
+        const field = th.dataset.sort;
+        const span = th.querySelector(".sort-indicator");
+        if (!span) return;
+        if (field === currentSort.field)
+          span.textContent = currentSort.dir === "asc" ? "▲" : "▼";
+        else span.textContent = "";
+      });
+
+      const label =
+        currentSort.field === "brand"
+          ? "Brand"
+          : currentSort.field === "dimension"
+          ? "Dimenzija"
+          : currentSort.field === "season"
+          ? "Sezona"
+          : currentSort.field === "priceDisplay"
+          ? "Cijena"
+          : "Naziv";
+      sortInfo.textContent = label + (currentSort.dir === "asc" ? " ↑" : " ↓");
+    }
+
+    function render() {
+      const total = filteredData.length;
+      const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      const slice = filteredData.slice(start, end);
+
+      tbody.innerHTML = "";
+
+      if (!slice.length) {
+        tbody.innerHTML =
+          '<tr><td colspan="6">Nema rezultata za zadane filtere.</td></tr>';
+      } else {
+        for (const item of slice) {
+          const tr = document.createElement("tr");
+
+          const tdImg = document.createElement("td");
+          if (item.image_url || item.image) {
+            const img = document.createElement("img");
+            img.src = item.image_url || item.image;
+            img.alt = item.name || "";
+            img.className = "tyre-img";
+            tdImg.appendChild(img);
+          }
+          tr.appendChild(tdImg);
+
+          const tdName = document.createElement("td");
+          tdName.className = "name-cell";
+          const nameBox = document.createElement("div");
+          const main = document.createElement("div");
+          main.className = "name-main";
+          main.textContent = item.name || "";
+          const sub = document.createElement("div");
+          sub.className = "name-sub";
+          sub.textContent = item.dimension || item.dimension_label || "";
+          nameBox.appendChild(main);
+          nameBox.appendChild(sub);
+
+          const brandInline = document.createElement("div");
+          brandInline.className = "brand-inline";
+          brandInline.textContent = item.brand || "";
+          nameBox.appendChild(brandInline);
+
+          const availability = document.createElement("div");
+          availability.className = "availability-note";
+          availability.textContent = "Stanje dostupno na upit";
+          nameBox.appendChild(availability);
+
+          tdName.appendChild(nameBox);
+          tr.appendChild(tdName);
+
+          const tdBrand = document.createElement("td");
+          tdBrand.className = "brand-col";
+          tdBrand.textContent = item.brand || "";
+          tr.appendChild(tdBrand);
+
+          const tdDim = document.createElement("td");
+          tdDim.textContent = item.dimension || "";
+          tr.appendChild(tdDim);
+
+          const tdPrice = document.createElement("td");
+          tdPrice.className = "price-cell";
+          tdPrice.textContent = item.priceDisplay ?? "";
+          tr.appendChild(tdPrice);
+
+          const tdSeason = document.createElement("td");
+          tdSeason.className = "season-col";
+
+          if (item.season) {
+            const tag = document.createElement("span");
+            let cls = "tag ";
+            const sl = item.season.toLowerCase();
+            if (sl.includes("zim")) cls += "zimska";
+            else if (sl.includes("ljet")) cls += "ljetna";
+            else if (sl.includes("cjelog")) cls += "cjelogodisnja";
+            else cls += "zimska";
+            tag.className = cls;
+            tag.textContent = item.season;
+
+            tdSeason.appendChild(tag);
+
+            const mobileTag = tag.cloneNode(true);
+            mobileTag.classList.add("season-tag-mobile");
+            nameBox.appendChild(mobileTag);
+          }
+          tr.appendChild(tdSeason);
+
+          tbody.appendChild(tr);
+        }
+      }
+
+      countInfo.textContent = total;
+      pageInfo.textContent = `Stranica ${currentPage}/${totalPages}`;
+      prevPageBtn.disabled = currentPage <= 1;
+      nextPageBtn.disabled = currentPage >= totalPages;
+    }
+
+    if (searchInput) searchInput.addEventListener("input", applyFilters);
+    if (productTypeSelect) productTypeSelect.addEventListener("change", applyFilters);
+    if (seasonSelect) seasonSelect.addEventListener("change", applyFilters);
+    if (brandSelect) brandSelect.addEventListener("change", applyFilters);
+    if (widthSelect) widthSelect.addEventListener("change", applyFilters);
+    if (heightSelect) heightSelect.addEventListener("change", applyFilters);
+    if (rimSelect) rimSelect.addEventListener("change", applyFilters);
+
+    if (prevPageBtn) {
+      prevPageBtn.addEventListener("click", () => {
+        if (currentPage > 1) { currentPage--; render(); }
+      });
+    }
+
+    if (nextPageBtn) {
+      nextPageBtn.addEventListener("click", () => {
+        const totalPages = Math.max(1, Math.ceil(filteredData.length / PAGE_SIZE));
+        if (currentPage < totalPages) { currentPage++; render(); }
+      });
+    }
+
+    document.querySelectorAll("th.sortable").forEach((th) => {
+      th.addEventListener("click", () => {
+        applySort(th.dataset.sort, true);
+      });
+    });
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("light-theme");
+        const isLight = document.body.classList.contains("light-theme");
+        themeToggleBtn.textContent = isLight ? "Tamna pozadina" : "Svijetla pozadina";
+      });
+    }
+
+    // INIT (čeka da se vanjski JSON ubaci u script tagove, pa tek onda koristi tvoju logiku)
+    (async () => {
+      await preloadAllJson();
+      initData();
+      initBrandFilter();
+      initDimensionFilters();
+      applyFilters();
+    })();
+  </script>
+</body>
+</html>
