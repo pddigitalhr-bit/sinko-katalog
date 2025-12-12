@@ -1,1 +1,83 @@
+[
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR MX NADOMESTNI (gumi)",
+    "brand": "MX",
+    "price":  "20,00 €",
+    "price_display": "20,00 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/MX-tpms-senzor-mx-nadomestni--(gumi)-30011117"
+  },
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR MX NADOMESTNI (metal črni)",
+    "brand": "MX",
+    "price": "20 €",
+    "price_display": "20 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/MX-tpms-senzor-mx-nadomestni--(metal-crni)-30011119"
+  },
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR MX (kovinski srebrni)",
+    "brand": "MX",
+    "price": "53,00 €",
+    "price_display": "53,00 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/MX-tpms-senzor-mx-(kovinski-srebrni)-30011113"
+  },
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR ALCAR SCHRADER GUMI",
+    "brand": "ALCAR",
+    "price": "53,00 €",
+    "price_display": "53,00 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/ALCAR-tpms-senzor-alcar-schrader-gumi-30011118"
+  },
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR MX (kovinski črni)",
+    "brand": "MX",
+    "price": "53,00 €",
+    "price_display": "53,00 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/MX-tpms-senzor-mx-(kovinski-crni)-30018544"
+  },
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR CGS TS01 (kovinski črni)",
+    "brand": "CGS",
+    "price": "53,00 €",
+    "price_display": "53,00 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/CGS-tpms-senzor-cgs-ts01-(kovinski-crni)-30018547"
+  },
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR CGS TS01 (kovinski srebrni)",
+    "brand": "CGS",
+    "price": "53,00 €",
+    "price_display": "53,00 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/CGS-tpms-senzor-cgs-ts01-(kovinski-srebrni)-30018548"
+  },
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR ITALSENS (kovinski črni)",
+    "brand": "ITALSENS",
+    "price": "53,00 €",
+    "price_display": "53,00 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/ITALSENS-tpms-senzor-italsens-(kovinski-crni)-30018650"
+  },
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR MX 433/315 Mhz",
+    "brand": "MX",
+    "price": "53,00 €",
+    "price_display": "76,25 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/MX-tpms-senzor-mx-433-315-mhz-30011105"
+  },
+  {
+    "type": "sensor",
+    "name": "TPMS SENZOR BMW",
+    "brand": "BMW",
+    "price": "100,00 €",
+    "price_display": "100,00 €",
+    "product_url": "https://www.vulkanizerstvo-furlan.com/hr/ventili/BMW-tpms-senzor-bmw-30011101"
+  }
+]
 
